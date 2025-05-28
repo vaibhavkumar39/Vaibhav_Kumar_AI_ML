@@ -6,15 +6,22 @@ from selenium.webdriver.support import expected_conditions as EC
 import pandas as pd
 import time
 import os
-def scrape(search_query):
+
+def initialize_driver():
     driver = webdriver.Chrome()
     wait = WebDriverWait(driver, 15)
+    return driver, wait
+
+def scroll_and_collect_places(driver, wait, search_query):
     driver.get(f"https://www.google.com/maps/search/{search_query}")
     time.sleep(10)
     for _ in range(10):
         driver.find_element(By.TAG_NAME, "body").send_keys(Keys.END)
         time.sleep(2)
     places = driver.find_elements(By.CSS_SELECTOR, ".hfpxzc")
+    return places
+
+def extract_place_data(driver, wait, places):
     data = []
     for place in places[:20]:
         try:
@@ -24,7 +31,7 @@ def scrape(search_query):
             time.sleep(5)
             try:
                 name_element = wait.until(
-                    EC.presence_of_element_located((By.CSS_SELECTOR, "h1.DUwDvf, h1.fontHeadlineLarge"))                )
+                    EC.presence_of_element_located((By.CSS_SELECTOR, "h1.DUwDvf, h1.fontHeadlineLarge")))
                 name = name_element.text.strip()
             except:
                 name = "Not Found"
@@ -45,12 +52,22 @@ def scrape(search_query):
                 except:
                     location = "Not Found"
             data.append({
-                "Name": name,"Phone": phone, "Location": location})
+                "Name": name,
+                "Phone": phone,
+                "Location": location
+            })
             driver.find_element(By.CSS_SELECTOR, 'button[jsaction*="back"]').click()
             time.sleep(3)
         except:
             continue
-    driver.quit()
+    return data
+def scrape(search_query):
+    driver, wait = initialize_driver()
+    try:
+        places = scroll_and_collect_places(driver, wait, search_query)
+        data = extract_place_data(driver, wait, places)
+    finally:
+        driver.quit()
     if data:
         df = pd.DataFrame(data)
         base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
