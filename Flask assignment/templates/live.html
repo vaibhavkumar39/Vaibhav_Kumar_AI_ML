@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Live News</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.min.js"></script>
+</head>
+<body>
+    <h1>Live News Feed:</h1>
+    <div id="newsFeed"></div>
+
+    <script>
+        const socket = io();
+        socket.on('broadcast_headline', function(data) {
+            const feed = document.getElementById('newsFeed');
+            const div = document.createElement('div');
+            div.className = 'headline';
+            div.textContent = data.headline;
+            feed.prepend(div);
+        });
+    </script>
+</body>
+</html>

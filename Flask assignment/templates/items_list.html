@@ -1,0 +1,38 @@
+<!-- 
+FLASK 7 FILE
+-->
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Item List</title>
+  </head>
+  <body>
+    <h1>My Items</h1>
+    <form action="/add" method="POST">
+      <input name="name" placeholder="Enter name" required />
+      <input name="age" placeholder="Enter age" required />
+      <input name="city" placeholder="Enter city" required />
+      <button type="submit">Add</button>
+    </form>
+
+    <ul>
+      {% for item in items %}
+      <li>
+        {% if edit_id == item[0] %}
+        <form action="/update/{{ item[0] }}" method="POST">
+          <input name="name" value="{{ item[1] }}" required />
+          <input name="age" value="{{ item[2] }}" required />
+          <input name="city" value="{{ item[3] }}" required />
+          <button type="submit">Save</button>
+          <a href="/">Cancel</a>
+        </form>
+        {% else %} 
+        {{ item[1] }} | {{ item[2] }} | {{ item[3] }}
+        <a href="/?edit_id={{ item[0] }}">Edit</a>
+        <a href="/delete/{{ item[0] }}">Delete</a>
+        {% endif %}
+      </li>
+      {% endfor %}
+    </ul>
+  </body>
+</html>

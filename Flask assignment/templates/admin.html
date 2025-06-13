@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin News Panel</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.min.js"></script>
+</head>
+<body>
+    <h1>Post News </h1>
+    <input id="headlineInput" placeholder="Enter headline...">
+    <button onclick="sendHeadline()">Send</button>
+
+    <script>
+        const socket = io();
+
+        function sendHeadline() {
+            const input = document.getElementById('headlineInput');
+            const headline = input.value.trim();
+            if (headline) {
+                socket.emit('new_headline', { headline });
+                input.value = '';
+            }
+        }
+    </script>
+</body>
+</html>

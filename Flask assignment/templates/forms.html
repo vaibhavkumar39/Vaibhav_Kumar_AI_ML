@@ -1,0 +1,21 @@
+<!-- 
+FLASK 4 FILE
+-->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Form</title>
+</head>
+<body>
+    <h1>Fill this form to show data</h1>
+    <form action={{ url_for("show") }} method="POST">
+        Enter your name
+        <input name="name"><br><br>
+        Enter your age
+        <input name="age"><br><br>
+        Enter your city
+        <input name="city"><br><br>
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>
