@@ -1,0 +1,25 @@
+<!-- 
+FLASK 13 FILE
+-->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Notifications</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.min.js"></script>
+</head>
+<body>
+    <h1>Live Notifications</h1>
+    <div id="notifs"></div>
+
+    <script>
+        const socket = io();
+
+        socket.on('notification', function(data) {
+            const div = document.createElement('div');
+            div.textContent = data.message;
+            document.getElementById('notifs').prepend(div);
+        });
+    </script>
+</body>
+</html>
+
